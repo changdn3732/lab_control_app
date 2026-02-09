@@ -12,10 +12,10 @@ if ! python3 -c "import flet" 2>/dev/null; then
     # wheels 폴더가 있으면 오프라인 설치, 없으면 온라인 설치
     if [ -d "wheels" ] && [ "$(ls -A wheels 2>/dev/null)" ]; then
         echo "   (오프라인 모드)"
-        sudo pip3 install --break-system-packages --no-index --find-links=wheels -r lab_control_app/requirements.txt
+        sudo pip3 install --no-index --find-links=wheels -r lab_control_app/requirements.txt
     else
         echo "   (온라인 모드)"
-        sudo pip3 install --break-system-packages -r lab_control_app/requirements.txt
+        sudo pip3 install -r lab_control_app/requirements.txt
     fi
     
     if [ $? -eq 0 ]; then
