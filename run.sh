@@ -26,6 +26,9 @@ if ! python3 -c "import flet" 2>/dev/null; then
     fi
 fi
 
-# 앱 실행
-cd lab_control_app
+# 앱 실행 (lab_control_app 폴더가 있으면 이동)
+if [ -d "lab_control_app" ]; then
+    cd lab_control_app
+fi
+
 python3 main.py
