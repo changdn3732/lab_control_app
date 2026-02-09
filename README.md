@@ -50,35 +50,21 @@ sudo usermod -a -G dialout $USER
 ```
 ⚠️ **이후 로그아웃 후 다시 로그인 필요!**
 
-### 5. 프로젝트 클론 및 설정
+### 5. 프로젝트 클론 및 실행
 ```bash
 # 저장소 클론
 git clone https://github.com/changdn3732/lab_control_app.git
 cd lab_control_app
 
-# 가상환경 생성 및 활성화
-python3 -m venv venv
-source venv/bin/activate
-
-# 패키지 설치
-pip install -r lab_control_app/requirements.txt
-```
-
-### 6. 앱 실행
-```bash
-cd lab_control_app
-python main.py
-```
-
-### 7. 간편 실행 (재부팅 후에도 사용 가능)
-처음 한 번만 실행 권한을 부여하면 이후에는 스크립트로 간편하게 실행할 수 있습니다:
-```bash
 # 실행 권한 부여 (최초 1회)
 chmod +x run.sh
 
-# 앱 실행 (가상환경 자동 활성화)
+# 앱 실행 (가상환경 자동 생성 및 패키지 설치)
 ./run.sh
 ```
+
+> ℹ️ `run.sh`가 자동으로 가상환경을 생성하고 필요한 패키지를 설치합니다.  
+> 재부팅 후에도 `./run.sh`만 실행하면 됩니다.
 
 ---
 
@@ -93,16 +79,14 @@ sudo apt update && sudo apt install -y python3 python3-pip python3-venv \
 # 시리얼 포트 권한
 sudo usermod -a -G dialout $USER
 
-# 프로젝트 설정
+# 프로젝트 클론 및 실행
 git clone https://github.com/changdn3732/lab_control_app.git
 cd lab_control_app
-python3 -m venv venv
-source venv/bin/activate
-pip install -r lab_control_app/requirements.txt
-
-# 실행
-cd lab_control_app && python main.py
+chmod +x run.sh
+./run.sh
 ```
+
+> ⚠️ 시리얼 포트 권한 적용을 위해 최초 설치 후 **로그아웃/로그인** 필요
 
 ---
 
