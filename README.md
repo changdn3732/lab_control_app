@@ -90,6 +90,38 @@ chmod +x run.sh
 
 ---
 
+## 🔌 오프라인 설치 (인터넷 없는 환경)
+
+인터넷이 연결되지 않은 환경에서 사용하려면 미리 패키지를 다운로드해야 합니다.
+
+### 준비 단계 (인터넷 연결된 Linux에서)
+```bash
+# 저장소 클론
+git clone https://github.com/changdn3732/lab_control_app.git
+cd lab_control_app
+
+# wheel 다운로드 스크립트 실행
+chmod +x download_wheels.sh
+./download_wheels.sh
+
+# USB에 복사하거나, git에 포함
+git add wheels/
+git commit -m "Add offline wheels"
+git push   # (선택) 개인 저장소에 올리기
+```
+
+### 오프라인 환경에서 실행
+```bash
+# USB에서 복사하거나 git clone
+cd lab_control_app
+chmod +x run.sh
+./run.sh
+```
+
+> ℹ️ `run.sh`가 `wheels/` 폴더를 감지하면 자동으로 오프라인 설치를 진행합니다.
+
+---
+
 ## Windows 설치 가이드
 
 ### 1. Python 설치
