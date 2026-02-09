@@ -1,0 +1,50 @@
+{
+  "created": "2026-02-05T10:46:36.532184",
+  "blocks": [
+    {
+      "device_id": "upper_stage",
+      "start_seconds": 120,
+      "duration_seconds": 60,
+      "action_name": "move_minus",
+      "action_params": {
+        "speed": 1000
+      }
+    },
+    {
+      "device_id": "upper_stage",
+      "start_seconds": 1,
+      "duration_seconds": 300,
+      "action_name": "move_plus",
+      "action_params": {
+        "speed": 1000
+      }
+    },
+    {
+      "device_id": "upper_stage",
+      "start_seconds": 600,
+      "duration_seconds": 60,
+      "action_name": "move_minus",
+      "action_params": {
+        "speed": 1000
+      }
+    },
+    {
+      "device_id": "lower_stage",
+      "start_seconds": 0,
+      "duration_seconds": 60,
+      "action_name": "move_plus",
+      "action_params": {
+        "speed": 1000
+      }
+    },
+    {
+      "device_id": "upper_rotate",
+      "start_seconds": 0,
+      "duration_seconds": 300,
+      "action_name": "rotate_ccw",
+      "action_params": {
+        "speed": 1000
+      }
+    }
+  ]
+}
