@@ -93,10 +93,10 @@ class SchedulerView:
             {"id": "lower_rotate", "name": "하부 회전", "color": "#f4a261", "icon": ft.Icons.ROTATE_LEFT, "slave_id": 2, "type": "rotate"},
         ]
         
-        # 가스 장치 정의 (Slave ID 5, 6)
+        # 가스 장치 정의 (Slave ID 5: MFC, Slave ID 6: BPR)
         self.gas_devices = [
-            {"id": "gas1", "name": "MFC #1", "color": "#007bff", "icon": ft.Icons.AIR, "slave_id": 5, "type": "gas"},
-            {"id": "gas2", "name": "MFC #2", "color": "#17a2b8", "icon": ft.Icons.AIR, "slave_id": 6, "type": "gas"},
+            {"id": "mfc", "name": "MFC", "color": "#007bff", "icon": ft.Icons.AIR, "slave_id": 5, "type": "gas"},
+            {"id": "bpr", "name": "BPR", "color": "#17a2b8", "icon": ft.Icons.COMPRESS, "slave_id": 6, "type": "gas"},
         ]
         
         # 전체 장치 목록 (모터 + 가스)
@@ -153,18 +153,18 @@ class SchedulerView:
         
         # 가스 장치 데이터
         self.gas_data = {
-            'gas1': {'pressure': 0.0, 'temperature': 0.0, 'setpoint': 0.0, 'valve_open': False},
-            'gas2': {'pressure': 0.0, 'temperature': 0.0, 'setpoint': 0.0, 'valve_open': False},
+            'mfc': {'pressure': 0.0, 'temperature': 0.0, 'setpoint': 0.0, 'valve_open': False},
+            'bpr': {'pressure': 0.0, 'temperature': 0.0, 'setpoint': 0.0, 'valve_open': False},
         }
         
         # 가스 그래프 데이터
         self.gas_graph_data = {
-            'gas1_pressure': [],
-            'gas1_temperature': [],
-            'gas1_setpoint': [],
-            'gas2_pressure': [],
-            'gas2_temperature': [],
-            'gas2_setpoint': [],
+            'mfc_pressure': [],
+            'mfc_temperature': [],
+            'mfc_setpoint': [],
+            'bpr_pressure': [],
+            'bpr_temperature': [],
+            'bpr_setpoint': [],
         }
         
         # 모터 컨트롤러 초기화
@@ -563,28 +563,28 @@ class SchedulerView:
         # ==================== 가스 그래프 ====================
         # 가스 그래프 데이터 (압력, 온도, 셋포인트)
         self.gas_line_chart_data = {
-            'gas1_pressure': [],
-            'gas1_temperature': [],
-            'gas1_setpoint': [],
-            'gas2_pressure': [],
-            'gas2_temperature': [],
-            'gas2_setpoint': [],
+            'mfc_pressure': [],
+            'mfc_temperature': [],
+            'mfc_setpoint': [],
+            'bpr_pressure': [],
+            'bpr_temperature': [],
+            'bpr_setpoint': [],
         }
         
         # 가스 그래프 색상
         gas_chart_colors = {
-            'gas1_pressure': "#007bff",      # 파랑
-            'gas1_temperature': "#dc3545",   # 빨강
-            'gas1_setpoint': "#28a745",      # 초록
-            'gas2_pressure': "#17a2b8",      # 청록
-            'gas2_temperature': "#fd7e14",   # 주황
-            'gas2_setpoint': "#6f42c1",      # 보라
+            'mfc_pressure': "#007bff",      # 파랑
+            'mfc_temperature': "#dc3545",   # 빨강
+            'mfc_setpoint': "#28a745",      # 초록
+            'bpr_pressure': "#17a2b8",      # 청록
+            'bpr_temperature': "#fd7e14",   # 주황
+            'bpr_setpoint': "#6f42c1",      # 보라
         }
         
         # 가스 LineChartData 생성
         self.gas_line_data_series = []
-        gas_data_keys = ['gas1_pressure', 'gas1_temperature', 'gas1_setpoint', 
-                        'gas2_pressure', 'gas2_temperature', 'gas2_setpoint']
+        gas_data_keys = ['mfc_pressure', 'mfc_temperature', 'mfc_setpoint', 
+                        'bpr_pressure', 'bpr_temperature', 'bpr_setpoint']
         for key in gas_data_keys:
             data_series = fch.LineChartData(
                 points=[fch.LineChartDataPoint(0, 0)],
@@ -824,18 +824,18 @@ class SchedulerView:
         """가스 모니터링 섹션 빌드"""
         # 가스 장치 상태 표시 라벨
         self.gas_labels = {
-            'gas1_pressure': ft.Text("--", size=11, color="#007bff", weight=ft.FontWeight.BOLD),
-            'gas1_temperature': ft.Text("--", size=11, color="#dc3545"),
-            'gas1_setpoint': ft.Text("--", size=11, color="#28a745"),
-            'gas2_pressure': ft.Text("--", size=11, color="#17a2b8", weight=ft.FontWeight.BOLD),
-            'gas2_temperature': ft.Text("--", size=11, color="#dc3545"),
-            'gas2_setpoint': ft.Text("--", size=11, color="#28a745"),
+            'mfc_pressure': ft.Text("--", size=11, color="#007bff", weight=ft.FontWeight.BOLD),
+            'mfc_temperature': ft.Text("--", size=11, color="#dc3545"),
+            'mfc_setpoint': ft.Text("--", size=11, color="#28a745"),
+            'bpr_pressure': ft.Text("--", size=11, color="#17a2b8", weight=ft.FontWeight.BOLD),
+            'bpr_temperature': ft.Text("--", size=11, color="#dc3545"),
+            'bpr_setpoint': ft.Text("--", size=11, color="#28a745"),
         }
         
         # 가스 밸브 상태 아이콘
         self.gas_valve_icons = {
-            'gas1': ft.Icon(ft.Icons.CIRCLE, size=10, color="#dc3545"),
-            'gas2': ft.Icon(ft.Icons.CIRCLE, size=10, color="#dc3545"),
+            'mfc': ft.Icon(ft.Icons.CIRCLE, size=10, color="#dc3545"),
+            'bpr': ft.Icon(ft.Icons.CIRCLE, size=10, color="#dc3545"),
         }
         
         return ft.Container(
@@ -849,46 +849,46 @@ class SchedulerView:
                     padding=ft.padding.only(left=12, top=8, bottom=4),
                 ),
                 
-                # 가스 장치 1 (MFC #1)
+                # MFC (Mass Flow Controller)
                 ft.Container(
                     content=ft.Row([
                         ft.Container(
                             content=ft.Row([
-                                self.gas_valve_icons['gas1'],
+                                self.gas_valve_icons['mfc'],
                                 ft.Text("MFC#1", size=10, color="#666666", width=40),
                             ], spacing=4),
                             width=60,
                         ),
                         ft.Text("P:", size=9, color="#888888"),
-                        self.gas_labels['gas1_pressure'],
+                        self.gas_labels['mfc_pressure'],
                         ft.Container(width=4),
                         ft.Text("T:", size=9, color="#888888"),
-                        self.gas_labels['gas1_temperature'],
+                        self.gas_labels['mfc_temperature'],
                         ft.Container(width=4),
                         ft.Text("SP:", size=9, color="#888888"),
-                        self.gas_labels['gas1_setpoint'],
+                        self.gas_labels['mfc_setpoint'],
                     ], spacing=3),
                     padding=ft.padding.symmetric(horizontal=12, vertical=4),
                 ),
                 
-                # 가스 장치 2 (MFC #2)
+                # BPR (Back Pressure Regulator)
                 ft.Container(
                     content=ft.Row([
                         ft.Container(
                             content=ft.Row([
-                                self.gas_valve_icons['gas2'],
+                                self.gas_valve_icons['bpr'],
                                 ft.Text("MFC#2", size=10, color="#666666", width=40),
                             ], spacing=4),
                             width=60,
                         ),
                         ft.Text("P:", size=9, color="#888888"),
-                        self.gas_labels['gas2_pressure'],
+                        self.gas_labels['bpr_pressure'],
                         ft.Container(width=4),
                         ft.Text("T:", size=9, color="#888888"),
-                        self.gas_labels['gas2_temperature'],
+                        self.gas_labels['bpr_temperature'],
                         ft.Container(width=4),
                         ft.Text("SP:", size=9, color="#888888"),
-                        self.gas_labels['gas2_setpoint'],
+                        self.gas_labels['bpr_setpoint'],
                     ], spacing=3),
                     padding=ft.padding.only(left=12, right=12, top=4, bottom=10),
                 ),
@@ -902,7 +902,7 @@ class SchedulerView:
         self.read_gas_data()
         
         # UI 업데이트
-        for device_id in ['gas1', 'gas2']:
+        for device_id in ['mfc', 'bpr']:
             data = self.gas_data.get(device_id, {})
             
             # 라벨 업데이트
@@ -935,8 +935,8 @@ class SchedulerView:
         if not hasattr(self, 'gas_line_chart') or not hasattr(self, 'gas_line_data_series'):
             return
         
-        gas_data_keys = ['gas1_pressure', 'gas1_temperature', 'gas1_setpoint', 
-                        'gas2_pressure', 'gas2_temperature', 'gas2_setpoint']
+        gas_data_keys = ['mfc_pressure', 'mfc_temperature', 'mfc_setpoint', 
+                        'bpr_pressure', 'bpr_temperature', 'bpr_setpoint']
         
         max_val = 0
         for i, key in enumerate(gas_data_keys):
@@ -1154,8 +1154,8 @@ class SchedulerView:
                 self._mode_button("상부\n회전", ft.Icons.ROTATE_RIGHT, "#e76f51", "upper_rotate"),
                 self._mode_button("하부\n스테이지", ft.Icons.ARROW_DOWNWARD, "#9b5de5", "lower_stage"),
                 self._mode_button("하부\n회전", ft.Icons.ROTATE_LEFT, "#f4a261", "lower_rotate"),
-                self._mode_button("MFC\n#1", ft.Icons.AIR, "#007bff", "gas1"),
-                self._mode_button("MFC\n#2", ft.Icons.AIR, "#17a2b8", "gas2"),
+                self._mode_button("MFC", ft.Icons.AIR, "#007bff", "mfc"),
+                self._mode_button("BPR", ft.Icons.COMPRESS, "#17a2b8", "bpr"),
             ],
             spacing=10,
             alignment=ft.MainAxisAlignment.CENTER,
@@ -1325,8 +1325,8 @@ class SchedulerView:
                     ft.Container(height=10),
                     ft.Row(
                         [
-                            self._gas_valve_card("gas1", "MFC #1 (ID:5)", "#007bff"),
-                            self._gas_valve_card("gas2", "MFC #2 (ID:6)", "#17a2b8"),
+                            self._gas_valve_card("mfc", "MFC (ID:5)", "#007bff"),
+                            self._gas_valve_card("bpr", "BPR (ID:6)", "#17a2b8"),
                         ],
                         spacing=15,
                         alignment=ft.MainAxisAlignment.CENTER,

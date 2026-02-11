@@ -340,8 +340,8 @@ class GasDeviceReader:
 class GasController:
     """
     가스 장치 통합 컨트롤러
-    - Slave ID 5: MFC/BPR #1
-    - Slave ID 6: MFC/BPR #2
+    - Slave ID 5: MFC (Mass Flow Controller)
+    - Slave ID 6: BPR (Back Pressure Regulator)
     """
     
     def __init__(self, port: str = 'COM7', baudrate: int = 19200):
@@ -353,13 +353,15 @@ class GasController:
         self.connected = False
         
         # 가스 장치 인스턴스
-        self.device1 = GasDeviceReader(slave_id=5, device_type=DeviceType.MFC)
-        self.device2 = GasDeviceReader(slave_id=6, device_type=DeviceType.MFC)
+        # Slave ID 5: MFC (Mass Flow Controller)
+        # Slave ID 6: BPR (Back Pressure Regulator)
+        self.mfc = GasDeviceReader(slave_id=5, device_type=DeviceType.MFC)
+        self.bpr = GasDeviceReader(slave_id=6, device_type=DeviceType.BPR)
         
         # 장치 ID 매핑
         self.devices = {
-            'gas1': self.device1,
-            'gas2': self.device2,
+            'mfc': self.mfc,
+            'bpr': self.bpr,
         }
         
         # 콜백
@@ -391,8 +393,8 @@ class GasController:
             self.log(f"Modbus 연결 성공: {self.port}")
             
             # 장치에 공유 클라이언트 전달
-            self.device1.connect(self.client)
-            self.device2.connect(self.client)
+            self.mfc.connect(self.client)
+            self.bpr.connect(self.client)
             
             return True
             
@@ -402,8 +404,8 @@ class GasController:
     
     def disconnect(self):
         """연결 해제"""
-        self.device1.disconnect()
-        self.device2.disconnect()
+        self.mfc.disconnect()
+        self.bpr.disconnect()
         
         if self.client:
             self.client.close()

@@ -537,30 +537,30 @@ class DeviceSettingsView:
     
     def _add_gas_device_cards(self):
         """가스 장치 카드 추가"""
-        # MFC #1 (Slave ID 5)
-        gas1_device = {
+        # MFC (Slave ID 5)
+        mfc_device = {
             "port": self.gas_port,
             "type": "mfc",
             "baudrate": self.gas_baudrate,
             "slave_id": 5,
-            "gas_device_id": "gas1",
+            "gas_device_id": "mfc",
         }
         # 중복 체크
-        existing = [d for d in self.connected_devices if d.get("gas_device_id") == "gas1"]
+        existing = [d for d in self.connected_devices if d.get("gas_device_id") == "mfc"]
         if not existing:
-            self.connected_devices.append(gas1_device)
+            self.connected_devices.append(mfc_device)
         
-        # MFC #2 (Slave ID 6)
-        gas2_device = {
+        # BPR (Slave ID 6)
+        bpr_device = {
             "port": self.gas_port,
-            "type": "mfc",
+            "type": "bpr",
             "baudrate": self.gas_baudrate,
             "slave_id": 6,
-            "gas_device_id": "gas2",
+            "gas_device_id": "bpr",
         }
-        existing = [d for d in self.connected_devices if d.get("gas_device_id") == "gas2"]
+        existing = [d for d in self.connected_devices if d.get("gas_device_id") == "bpr"]
         if not existing:
-            self.connected_devices.append(gas2_device)
+            self.connected_devices.append(bpr_device)
     
     def _on_gas_log(self, message: str):
         """가스 컨트롤러 로그 콜백"""
