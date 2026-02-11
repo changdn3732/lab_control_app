@@ -1384,25 +1384,12 @@ class SchedulerView:
                 alignment=ft.MainAxisAlignment.CENTER,
             )
         
-        # 정지 버튼
-        stop_button = ft.Container(
-            content=ft.Text("■ 정지", size=11, color="#ffffff", weight=ft.FontWeight.BOLD),
-            width=120,
-            height=30,
-            bgcolor="#dc3545",
-            border_radius=6,
-            alignment=ft.Alignment(0, 0),
-            on_click=lambda _: self._stop_single_motor(device_id),
-        )
-        
         return ft.Container(
             content=ft.Column(
                 [
                     ft.Text(name, size=12, weight=ft.FontWeight.BOLD, color="#333333"),
                     ft.Container(height=8),
                     buttons,
-                    ft.Container(height=8),
-                    stop_button,
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=0,
