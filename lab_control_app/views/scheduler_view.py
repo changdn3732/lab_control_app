@@ -1494,16 +1494,23 @@ class SchedulerView:
             self.page.update()
     
     def _hold_button(self, label, color, device_id, direction):
-        """누르고 있을 때 작동하는 버튼"""
-        return ft.Container(
+        """누르고 있을 때만 작동하는 버튼 (떼면 정지)"""
+        button_container = ft.Container(
             content=ft.Text(label, size=20, color="#ffffff", weight=ft.FontWeight.BOLD),
             width=60,
             height=50,
             bgcolor=color,
             border_radius=10,
             alignment=ft.Alignment(0, 0),
-            on_click=lambda _: self._manual_motor_action(device_id, direction, "click"),
-            # TODO: on_long_press_start/end 구현 필요 (flet 버전에 따라)
+        )
+        
+        # GestureDetector로 누르기/떼기 감지
+        return ft.GestureDetector(
+            content=button_container,
+            on_tap_down=lambda e: self._manual_motor_action(device_id, direction, "start"),
+            on_tap_up=lambda e: self._manual_motor_stop(device_id),
+            on_horizontal_drag_end=lambda e: self._manual_motor_stop(device_id),
+            on_vertical_drag_end=lambda e: self._manual_motor_stop(device_id),
         )
     
     def _set_speed_mode(self, mode):
@@ -1557,6 +1564,13 @@ class SchedulerView:
             self.motor_speeds[device_id] = speed
         else:
             self.motor_speeds[device_id] = 0
+    
+    def _manual_motor_stop(self, device_id):
+        """수동 제어 - 버튼에서 손 떼면 모터 정지"""
+        success = self._send_motor_command(device_id, "stop", 0)
+        if success:
+            self.motor_speeds[device_id] = 0
+        print(f"[수동] 🛑 {device_id} - 정지")
     
     def _build_gas_control_panel(self, gas_device):
         """가스 장치 제어 패널 (스케줄 모드)"""
